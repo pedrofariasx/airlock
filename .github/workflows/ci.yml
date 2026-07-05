@@ -41,11 +41,14 @@ jobs:
         with:
           bun-version: latest
       - run: bun install
-      - run: bun run build --filter '@airlock/*'
+      # Build core first so @airlock/fetch's runtime import of @airlock/core
+      # resolves via the dist/ exports condition under bun.
+      - run: (cd packages/core && bun run build)
+      - run: (cd packages/fetch && bun run build)
       - name: Test with bun
         run: |
           for d in packages/core packages/fetch; do
-            (cd "$d" && bun --bun test test/*.test.ts)
+            (cd "$d" && bun test test/*.test.ts)
           done
 
   test-deno:
@@ -55,13 +58,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v2
         with:
-          deno-version: v1.x
+          deno-version: v2.x
+      # Deno resolves .js relative imports to .ts with this flag. The core
+      # engine is the zero-dep isomorphic package we care about here.
       - name: Typecheck core with Deno
         run: |
-          (cd packages/core && deno check src/index.ts)
-      - name: Run core tests with Deno (npm:test compat)
+          (cd packages/core && deno check --unstable-sloppy-imports src/index.ts)
+      - name: Run core tests with Deno
         run: |
-          (cd packages/core && deno run --allow-read --allow-env npm:tsx test/core.test.ts) || true
+          (cd packages/core && deno test --unstable-sloppy-imports --allow-read --allow-env test/core.test.ts)
 
   publish:
     name: Publish to npm

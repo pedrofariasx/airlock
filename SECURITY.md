@@ -10,7 +10,7 @@ The core guarantee of `Airlock` is: **sensitive values must not reach the untrus
 
 If you find a bypass, an incorrect restoration (data loss or duplication), or any other security issue, please report it privately:
 
-- Email: **security@veil.dev** (replace with your project's address)
+- Email: **pedrofariasx@email.com**
 - Or open a private security advisory on GitHub: `Security` → `Report a vulnerability`.
 
 Please include, when possible:
