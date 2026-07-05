@@ -1,0 +1,15 @@
+{
+  "name": "veil-examples",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "openai-stream": "node --import tsx openai-stream.ts",
+    "anthropic": "node --import tsx anthropic.ts",
+    "custom-api": "node --import tsx custom-api.ts",
+    "express-middleware": "node --import tsx express-middleware.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "@types/node": "^22.0.0"
+  }
+}

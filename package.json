@@ -1,0 +1,32 @@
+{
+  "name": "veil",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Reversible redaction for calling any HTTP API on an untrusted provider without leaking PII or secrets.",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/examples"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "npm run build && changeset publish"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.7.0",
+    "@changesets/cli": "^2.31.0",
+    "@types/node": "^26.1.0",
+    "c8": "^11.0.0",
+    "tsx": "^4.23.0",
+    "typescript": "^5.6.0"
+  }
+}

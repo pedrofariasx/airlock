@@ -1,0 +1,35 @@
+{
+  "name": "@veil/fetch",
+  "version": "0.1.0",
+  "description": "Universal fetch wrapper that redacts PII/secrets on the way out and restores them on the way back.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:coverage": "c8 --reporter=text --reporter=lcov --include=src node --import tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@veil/core": "^0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "tsx": "^4.0.0",
+    "@types/node": "^22.0.0"
+  }
+}

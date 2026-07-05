@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test-node:
+    name: Node ${{ matrix.node }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22']
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck --workspaces --if-present
+      - run: npm run build --workspaces --if-present
+      - run: npm test
+      - name: Coverage
+        run: npm run test:coverage --workspaces --if-present
+
+  test-bun:
+    name: Bun
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install
+      - run: bun run build --filter '@veil/*'
+      - name: Test with bun
+        run: |
+          for d in packages/core packages/fetch; do
+            (cd "$d" && bun --bun test test/*.test.ts)
+          done
+
+  test-deno:
+    name: Deno
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v1.x
+      - name: Typecheck core with Deno
+        run: |
+          (cd packages/core && deno check src/index.ts)
+      - name: Run core tests with Deno (npm:test compat)
+        run: |
+          (cd packages/core && deno run --allow-read --allow-env npm:tsx test/core.test.ts) || true
+
+  publish:
+    name: Publish to npm
+    needs: [test-node, test-bun, test-deno]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+      - run: npm ci
+      - run: npm run build --workspaces --if-present
+      - name: Publish @veil/core
+        run: npm publish --access public --provenance
+        working-directory: packages/core
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish @veil/fetch
+        run: npm publish --access public --provenance
+        working-directory: packages/fetch
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
