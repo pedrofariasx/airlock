@@ -31,5 +31,30 @@
     "typescript": "^5.6.0",
     "tsx": "^4.0.0",
     "@types/node": "^22.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pedrofariasx/airlock.git",
+    "directory": "packages/fetch"
+  },
+  "homepage": "https://github.com/pedrofariasx/airlock",
+  "bugs": {
+    "url": "https://github.com/pedrofariasx/airlock/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "author": "pedrofariasx",
+  "keywords": [
+    "redaction",
+    "privacy",
+    "pii",
+    "secrets",
+    "fetch",
+    "llm",
+    "security",
+    "reversible",
+    "tokenization"
+  ]
 }
