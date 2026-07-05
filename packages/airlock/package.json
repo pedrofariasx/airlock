@@ -1,7 +1,7 @@
 {
-  "name": "@airlock/fetch",
+  "name": "@airlock/airlock",
   "version": "0.1.0",
-  "description": "Universal fetch wrapper that redacts PII/secrets on the way out and restores them on the way back.",
+  "description": "Reversible redaction for calling any HTTP API on an untrusted provider without leaking PII or secrets. Umbrella package re-exporting @airlock/core and @airlock/fetch.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,6 +11,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
+    },
+    "./fetch": {
+      "types": "./dist/fetch.d.ts",
+      "import": "./dist/fetch.js"
     }
   },
   "files": [
@@ -21,11 +29,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node --import tsx --test test/*.test.ts",
-    "test:coverage": "c8 --reporter=text --reporter=lcov --include=src node --import tsx --test test/*.test.ts"
+    "test": "node --import tsx --test test/*.test.ts"
   },
   "dependencies": {
-    "@airlock/core": "^0.1.0"
+    "@airlock/core": "^0.1.0",
+    "@airlock/fetch": "^0.1.0"
   },
   "devDependencies": {
     "typescript": "^5.6.0",

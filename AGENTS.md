@@ -4,16 +4,16 @@ Guidance for AI coding agents working in this repository.
 
 ## Project
 
-`veil` is a reversible redaction library for calling any HTTP API on an
+`Airlock` is a reversible redaction library for calling any HTTP API on an
 untrusted provider without leaking PII/secrets. Library-first; the `fetch`
 wrapper is the primary product.
 
 ## Layout
 
-- `packages/core` — pure redaction engine (`@veil/core`). Zero deps, isomorphic.
+- `packages/core` — pure redaction engine (`@airlock/core`). Zero deps, isomorphic.
   Only standard Web APIs allowed. No Node-only APIs here.
-- `packages/fetch` — universal `installRedactFetch` wrapper (`@veil/fetch`).
-  Depends on `@veil/core`. Web Streams / fetch only.
+- `packages/fetch` — universal `installRedactFetch` wrapper (`@airlock/fetch`).
+  Depends on `@airlock/core`. Web Streams / fetch only.
 - `apps/examples` — runnable examples.
 - `apps/docs` — docs source (placeholder).
 

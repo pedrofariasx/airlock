@@ -2,11 +2,11 @@
 
 ## Supported versions
 
-The latest minor release of `veil` is supported. Fixes are released as patches.
+The latest minor release of `Airlock` is supported. Fixes are released as patches.
 
 ## Reporting a vulnerability
 
-The core guarantee of `veil` is: **sensitive values must not reach the untrusted provider in cleartext.** The most important class of bug here is a **redaction bypass** — a value that should be tokenized but slips through to the network.
+The core guarantee of `Airlock` is: **sensitive values must not reach the untrusted provider in cleartext.** The most important class of bug here is a **redaction bypass** — a value that should be tokenized but slips through to the network.
 
 If you find a bypass, an incorrect restoration (data loss or duplication), or any other security issue, please report it privately:
 
@@ -36,7 +36,7 @@ We prefer coordinated disclosure. Once a fix is released we will publish a secur
 ## What is out of scope
 
 - The provider logging the *tokenized* payload. That is the intended behavior; tokens are opaque and carry no PII.
-- Redaction of content-types `veil` is explicitly configured to skip (binary, non-text).
+- Redaction of content-types `Airlock` is explicitly configured to skip (binary, non-text).
 - Attacks on the underlying platform's `fetch` implementation.
 
 ## Bypass bounty

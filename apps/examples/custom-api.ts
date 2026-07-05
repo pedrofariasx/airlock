@@ -1,11 +1,11 @@
-// Example: calling an arbitrary, untrusted custom API with veil's fetch wrapper.
+// Example: calling an arbitrary, untrusted custom API with Airlock's fetch wrapper.
 //
 // Run: npm run custom-api   (from apps/examples)
 //
-// This shows the universal case: veil knows nothing about this endpoint's
+// This shows the universal case: Airlock knows nothing about this endpoint's
 // schema. It redacts every string in the JSON body and restores the response.
 
-// 0) Set up an in-process fake upstream FIRST, so veil wraps it. In a real
+// 0) Set up an in-process fake upstream FIRST, so Airlock wraps it. In a real
 //    app this step is your network — you just call installRedactFetch once.
 globalThis.fetch = (async (input: any, init?: any) => {
   const url = typeof input === 'string' ? input : input.toString();
@@ -17,7 +17,7 @@ globalThis.fetch = (async (input: any, init?: any) => {
   });
 }) as typeof fetch;
 
-import { installRedactFetch } from '@veil/fetch';
+import { installRedactFetch } from '@airlock/fetch';
 
 // 1) Install the wrapper. In a real app you'd do this once at startup.
 const uninstall = installRedactFetch({

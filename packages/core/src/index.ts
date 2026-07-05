@@ -1,4 +1,4 @@
-// @veil/core — pure reversible redaction engine. Zero deps, isomorphic.
+// @airlock/core — pure reversible redaction engine. Zero deps, isomorphic.
 
 export { Redactor, Restorer } from './engine.js';
 export type { RedactorOptions } from './engine.js';

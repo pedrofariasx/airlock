@@ -1,5 +1,5 @@
-// Example: calling an Anthropic-style messages endpoint with veil's fetch
-// wrapper. Same universal approach — veil doesn't need to know Anthropic's
+// Example: calling an Anthropic-style messages endpoint with Airlock's fetch
+// wrapper. Same universal approach — Airlock doesn't need to know Anthropic's
 // schema; it redacts every string in the body and restores the response.
 //
 // Run: npm run anthropic
@@ -15,7 +15,7 @@ globalThis.fetch = (async (_input: any, init?: any) => {
   );
 }) as typeof fetch;
 
-import { installRedactFetch } from '@veil/fetch';
+import { installRedactFetch } from '@airlock/fetch';
 
 const BASE = process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com';
 const KEY = process.env.ANTHROPIC_API_KEY || 'sk-ant-fake-key';

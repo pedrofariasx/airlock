@@ -1,6 +1,6 @@
 # Examples
 
-Runnable examples for `veil`. Each file is self-contained and uses an in-process
+Runnable examples for `Airlock`. Each file is self-contained and uses an in-process
 fake upstream so it runs without a real server or API key.
 
 ## Run
@@ -22,7 +22,7 @@ node --import tsx custom-api.ts
 
 ## What each shows
 
-- **`custom-api.ts`** — the universal case. veil knows nothing about the
+- **`custom-api.ts`** — the universal case. Airlock knows nothing about the
   endpoint's schema. It redacts every string in the JSON body and restores the
   response. This is the pattern to copy for any arbitrary HTTP API.
 - **`openai-stream.ts`** — an OpenAI-compatible streaming (`stream: true`)
@@ -30,15 +30,15 @@ node --import tsx custom-api.ts
   split across chunks.
 - **`anthropic.ts`** — an Anthropic-style `/v1/messages` call (non-streaming).
 - **`express-middleware.ts`** — a server that proxies outbound calls to an
-  untrusted upstream, with veil installed once at boot.
+  untrusted upstream, with Airlock installed once at boot.
 
 ## Python / curl / non-JS
 
-For non-JS clients, use the `veil-proxy` CLI companion (ships later in the
+For non-JS clients, use the `airlock-proxy` CLI companion (ships later in the
 roadmap):
 
 ```sh
-npx veil-proxy --upstream https://api.untrusted-upstream.com --port 8787
+npx airlock-proxy --upstream https://api.untrusted-upstream.com --port 8787
 REDACT_PII=1
 ```
 

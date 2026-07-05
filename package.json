@@ -1,5 +1,5 @@
 {
-  "name": "veil",
+  "name": "airlock-monorepo",
   "private": true,
   "version": "0.0.0",
   "description": "Reversible redaction for calling any HTTP API on an untrusted provider without leaking PII or secrets.",

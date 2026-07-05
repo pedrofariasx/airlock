@@ -1,4 +1,4 @@
-// @veil/fetch — universal redacting fetch wrapper.
+// @airlock/fetch — universal redacting fetch wrapper.
 //
 // Wraps globalThis.fetch. For every matching call it builds ONE Redactor
 // (request side) + Restorer (response side) pair in a closure, so tokens
@@ -11,7 +11,7 @@ import {
   RedactCategory,
   Redactor,
   Restorer,
-} from '@veil/core';
+} from '@airlock/core';
 
 export interface RedactFetchOptions {
   /**
@@ -349,7 +349,7 @@ export function installRedactFetch(options: RedactFetchOptions = {}): () => void
 
   const originalFetch = globalThis.fetch as typeof fetch;
   // If already wrapped, do not double-wrap. We tag the function.
-  if ((originalFetch as any).__veilWrapped) {
+  if ((originalFetch as any).__airlockWrapped) {
     return () => {}; // already installed; no-op uninstall
   }
 
@@ -447,8 +447,8 @@ export function installRedactFetch(options: RedactFetchOptions = {}): () => void
     return wrapResponse(response, restorer, resTypes);
   };
 
-  (wrappedFetch as any).__veilWrapped = true;
-  (wrappedFetch as any).__veilOriginal = originalFetch;
+  (wrappedFetch as any).__airlockWrapped = true;
+  (wrappedFetch as any).__airlockOriginal = originalFetch;
 
   globalThis.fetch = wrappedFetch as typeof fetch;
 

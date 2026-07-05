@@ -3,7 +3,7 @@
 //
 // Run: npm run openai-stream
 
-// 0) Fake upstream first, so veil wraps it.
+// 0) Fake upstream first, so Airlock wraps it.
 globalThis.fetch = (async (_input: any, init?: any) => {
   const body = JSON.parse((init?.body as string) ?? '{}');
   const userMsg = body?.messages?.[1]?.content ?? '';
@@ -24,7 +24,7 @@ globalThis.fetch = (async (_input: any, init?: any) => {
   });
 }) as typeof fetch;
 
-import { installRedactFetch } from '@veil/fetch';
+import { installRedactFetch } from '@airlock/fetch';
 
 const BASE = process.env.OPENAI_BASE_URL || 'https://api.openai.com';
 const KEY = process.env.OPENAI_API_KEY || 'sk-fake-key';

@@ -1,11 +1,11 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "veil-org/veil" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "pedrofariasx/airlock" }],
   "commit": false,
   "fixed": [],
-  "linked": [["@veil/core", "@veil/fetch"]],
+  "linked": [["@airlock/core", "@airlock/fetch", "@airlock/airlock"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": ["patch"],
-  "ignore": ["veil-examples"]
+  "ignore": ["airlock-examples"]
 }

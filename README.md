@@ -1,10 +1,10 @@
-# veil
+# Airlock
 
 Reversible redaction for calling **any HTTP API** on an untrusted provider without leaking PII or secrets.
 
-`veil` wraps `globalThis.fetch`. Before any network call, sensitive values (emails, phones, CPF/CNPJ, API keys, cards, JWTs, private keys, AWS secrets, bearer tokens, …) are replaced with opaque, stable tokens like `<<PII_EMAIL_1>>`. The upstream provider only ever sees tokens. When the response comes back, `veil` restores the original values exactly — including mid-stream, byte-for-byte. Your code reads the real data; the provider never does.
+`Airlock` wraps `globalThis.fetch`. Before any network call, sensitive values (emails, phones, CPF/CNPJ, API keys, cards, JWTs, private keys, AWS secrets, bearer tokens, …) are replaced with opaque, stable tokens like `<<PII_EMAIL_1>>`. The upstream provider only ever sees tokens. When the response comes back, `Airlock` restores the original values exactly — including mid-stream, byte-for-byte. Your code reads the real data; the provider never does.
 
-It is **universal**: the fetch wrapper does not assume anything about the endpoint, the schema, or whether it's an LLM. Any fetch to any URL is covered. Schema-aware SDK sugar (`veil/openai`, `veil/anthropic`) is optional and ships on top.
+It is **universal**: the fetch wrapper does not assume anything about the endpoint, the schema, or whether it's an LLM. Any fetch to any URL is covered. Schema-aware SDK sugar (`@airlock/airlock/openai`, `@airlock/airlock/anthropic`) is optional and ships on top.
 
 - Zero runtime dependencies in the core engine.
 - Isomorphic: Node 20+, browsers, Edge, Bun, Deno. Only standard Web APIs.
@@ -13,7 +13,7 @@ It is **universal**: the fetch wrapper does not assume anything about the endpoi
 ## Threat model
 
 - **Untrusted:** the upstream provider (arbitrary endpoint). It may log, train on, or resell your payload.
-- **Trusted:** your process that imports `veil`.
+- **Trusted:** your process that imports `Airlock`.
 - **Redaction happens before the network.** The provider sees only opaque tokens.
 - **Restoration happens in your process, after the response.**
 - The token↔original mapping is held **in memory only**, for the duration of the call. It is never persisted, logged, or sent anywhere.
@@ -22,13 +22,13 @@ It is **universal**: the fetch wrapper does not assume anything about the endpoi
 ## Install
 
 ```sh
-npm install veil
+npm install @airlock/airlock
 ```
 
-`veil` ships two packages: `@veil/core` (the pure engine) and `@veil/fetch` (the universal fetch wrapper). For most users the `veil` umbrella import is enough:
+`Airlock` ships two packages: `@airlock/core` (the pure engine) and `@airlock/fetch` (the universal fetch wrapper). For most users the `@airlock/airlock` umbrella import is enough:
 
 ```ts
-import { installRedactFetch } from 'veil/fetch';
+import { installRedactFetch } from '@airlock/airlock/fetch';
 ```
 
 ## Usage — the fetch wrapper (primary)
@@ -36,7 +36,7 @@ import { installRedactFetch } from 'veil/fetch';
 Install the wrapper once at the start of your program. Every `fetch()` afterwards is redacted/restored automatically:
 
 ```ts
-import { installRedactFetch } from 'veil/fetch';
+import { installRedactFetch } from '@airlock/airlock/fetch';
 
 const uninstall = installRedactFetch({
   // Which calls to redact. Default: all. Accepts a glob, an array of globs,
@@ -86,7 +86,7 @@ uninstall();
 
 ### Headers (off by default)
 
-Headers are **not redacted by default**. `Authorization` and custom auth headers are too easy to break. If you opt in, `veil` only redacts the values of headers you list explicitly — it never default-scans all headers:
+Headers are **not redacted by default**. `Authorization` and custom auth headers are too easy to break. If you opt in, `Airlock` only redacts the values of headers you list explicitly — it never default-scans all headers:
 
 ```ts
 installRedactFetch({
@@ -106,7 +106,7 @@ A single `Restorer` is created per fetch call (in a closure, sharing the request
 - **`application/json` and `text/*`:** the body is buffered, restored, and the `Response` is rebuilt with the same status, status text, and headers.
 - **Non-text content-types** (images, audio, `application/octet-stream`, …): **passed through untouched.**
 
-The wrapper preserves `Response` semantics — status, headers, trailers — and only swaps the body. `gzip`/`brotli` are decoded by the native fetch before `veil` sees the text.
+The wrapper preserves `Response` semantics — status, headers, trailers — and only swaps the body. `gzip`/`brotli` are decoded by the native fetch before `Airlock` sees the text.
 
 ### Concurrency & isolation
 
@@ -143,10 +143,10 @@ Non-overlap resolution: longer/more-specific patterns win. PEM private keys, dat
 
 ## Using the core engine directly
 
-If you don't want the fetch wrapper (e.g. you redact a log line, a prompt, a file), use `@veil/core`:
+If you don't want the fetch wrapper (e.g. you redact a log line, a prompt, a file), use `@airlock/core`:
 
 ```ts
-import { Redactor } from 'veil/core';
+import { Redactor } from '@airlock/airlock/core';
 
 const r = new Redactor();                 // default categories
 const redacted = r.redact('email alice@example.com, cpf 529.982.247-25');
@@ -178,17 +178,17 @@ interface RedactFetchOptions {
 }
 ```
 
-## When NOT to use veil
+## When NOT to use Airlock
 
 - **You already fully control the provider and the transport** (e.g. your own service over mTLS). Redaction adds overhead for no benefit.
-- **Your payload is meant to be opaque binary** and you never send text PII. `veil` won't touch binary bodies anyway, but there's nothing to redact.
+- **Your payload is meant to be opaque binary** and you never send text PII. `Airlock` won't touch binary bodies anyway, but there's nothing to redact.
 - **You need the provider to see the real PII to do its job** (e.g. an email-sending API that needs the recipient address). Redacting defeats the purpose. Consider redacting only the fields the provider doesn't need.
-- **You require hard, cryptographic guarantees of non-disclosure.** `veil` is deterministic redaction, not encryption. If the provider must process the value, a token breaks that. If you need zero-knowledge processing, use a different architecture.
+- **You require hard, cryptographic guarantees of non-disclosure.** `Airlock` is deterministic redaction, not encryption. If the provider must process the value, a token breaks that. If you need zero-knowledge processing, use a different architecture.
 - **Opt-in categories (IP, MAC, CEP, PIS, SSN) on prose-heavy inputs.** These match common shapes and will flag ordinary text. Prefer false-negatives over masking prose; leave them off unless your payload is structured.
 
 ## Comparison
 
-| | veil | server-side proxy | DLP gateways | field-masking SDKs |
+| | Airlock | server-side proxy | DLP gateways | field-masking SDKs |
 |---|---|---|---|---|
 | Works with any HTTP API | ✓ | ✓ | ✓ | per-SDK |
 | Redaction before network | ✓ | ✓ | ✓ | ✓ |
@@ -198,7 +198,7 @@ interface RedactFetchOptions {
 | No provider trust needed | ✓ | ✓ | ✓ | ✓ |
 | Zero deps / isomorphic core | ✓ | n/a | n/a | varies |
 
-`veil` is library-first: no proxy to deploy, no gateway to route through. The `veil-proxy` CLI companion exists for non-JS environments (curl, Python, Go, IDEs) and reuses the same core.
+`Airlock` is library-first: no proxy to deploy, no gateway to route through. The `airlock-proxy` CLI companion exists for non-JS environments (curl, Python, Go, IDEs) and reuses the same core.
 
 ## Security & disclosure
 

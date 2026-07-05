@@ -1,12 +1,12 @@
 # Contributing
 
-Thanks for considering a contribution to `veil`. This is a security-sensitive library, so a few extra rules apply.
+Thanks for considering a contribution to `Airlock`. This is a security-sensitive library, so a few extra rules apply.
 
 ## Setup
 
 ```sh
 git clone <repo>
-cd veil
+cd airlock
 npm install
 npm run build
 npm test
@@ -14,8 +14,8 @@ npm test
 
 The repo is a npm workspaces monorepo:
 
-- `packages/core` — the pure redaction engine (`@veil/core`). Zero deps, isomorphic.
-- `packages/fetch` — the universal fetch wrapper (`@veil/fetch`). Depends on `@veil/core`.
+- `packages/core` — the pure redaction engine (`@airlock/core`). Zero deps, isomorphic.
+- `packages/fetch` — the universal fetch wrapper (`@airlock/fetch`). Depends on `@airlock/core`.
 - `apps/examples` — runnable examples.
 
 ## Non-negotiables

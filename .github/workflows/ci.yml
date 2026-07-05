@@ -41,7 +41,7 @@ jobs:
         with:
           bun-version: latest
       - run: bun install
-      - run: bun run build --filter '@veil/*'
+      - run: bun run build --filter '@airlock/*'
       - name: Test with bun
         run: |
           for d in packages/core packages/fetch; do
@@ -79,14 +79,23 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: npm
       - run: npm ci
-      - run: npm run build --workspaces --if-present
-      - name: Publish @veil/core
+      # Build in dependency order: core -> fetch -> umbrella.
+      - run: npm run build --workspace @airlock/core
+      - run: npm run build --workspace @airlock/fetch
+      - run: npm run build --workspace @airlock/airlock
+      # Publish in dependency order so the umbrella can resolve its deps.
+      - name: Publish @airlock/core
         run: npm publish --access public --provenance
         working-directory: packages/core
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish @veil/fetch
+      - name: Publish @airlock/fetch
         run: npm publish --access public --provenance
         working-directory: packages/fetch
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish @airlock/airlock
+        run: npm publish --access public --provenance
+        working-directory: packages/airlock
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

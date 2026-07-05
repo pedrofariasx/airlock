@@ -1,14 +1,14 @@
-// Example: an Express server that wraps outbound fetch with veil so any
+// Example: an Express server that wraps outbound fetch with Airlock so any
 // backend call it makes to an untrusted provider is redacted.
 //
 // Run: npm run express-middleware
 //
-// This demonstrates veil used as outbound protection inside a server. The
+// This demonstrates Airlock used as outbound protection inside a server. The
 // Express route receives a request from your own client, then calls an
-// untrusted upstream on the client's behalf — veil ensures the upstream never
+// untrusted upstream on the client's behalf — Airlock ensures the upstream never
 // sees the client's PII.
 
-// 0) Fake upstream first, so veil wraps it.
+// 0) Fake upstream first, so Airlock wraps it.
 globalThis.fetch = (async (_input: any, init?: any) => {
   console.log('[upstream saw]', init?.body);
   const body = JSON.parse((init?.body as string) ?? '{}');
@@ -17,7 +17,7 @@ globalThis.fetch = (async (_input: any, init?: any) => {
   });
 }) as typeof fetch;
 
-import { installRedactFetch } from '@veil/fetch';
+import { installRedactFetch } from '@airlock/fetch';
 import { createServer } from 'node:http';
 
 // Install once at boot. All outbound fetch to the upstream is redacted.
@@ -37,7 +37,7 @@ const server = createServer(async (req, res) => {
   for await (const c of req) chunks.push(c as Buffer);
   const payload = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
 
-  // Outbound call to the untrusted upstream. veil redacts it.
+  // Outbound call to the untrusted upstream. Airlock redacts it.
   const up = await fetch('https://api.untrusted-upstream.com/v1/work', {
     method: 'POST',
     body: JSON.stringify(payload),

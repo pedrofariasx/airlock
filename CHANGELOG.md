@@ -8,14 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `@veil/core` 0.1.0: pure reversible redaction engine with `Redactor` / `Restorer`.
+- `@airlock/core` 0.1.0: pure reversible redaction engine with `Redactor` / `Restorer`.
   - Default categories: `email`, `phone`, `cpf`, `cnpj`, `apikey`, `card`,
     `dburl`, `jwt`, `privatekey`, `aws`, `token`.
   - Opt-in categories: `ip`, `mac`, `cep`, `pis`, `ssn`.
   - Real validators: CPF, CNPJ, PIS, SSN, CEP, IPv4, Luhn, AWS secret, JWT.
   - Non-overlap resolution: specific/long patterns win over generic ones.
   - Streaming-safe `Restorer` with lookahead for tokens split across chunks.
-- `@veil/fetch` 0.1.0: universal `installRedactFetch` wrapper around
+- `@airlock/fetch` 0.1.0: universal `installRedactFetch` wrapper around
   `globalThis.fetch`.
   - Redacts JSON / string / `FormData` / `URLSearchParams` / streaming request
     bodies; binary bodies pass through.

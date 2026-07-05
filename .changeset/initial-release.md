@@ -1,6 +1,6 @@
 ---
-"@veil/core": minor
-"@veil/fetch": minor
+"@airlock/core": minor
+"@airlock/fetch": minor
 ---
 
 Initial public release of the reversible redaction engine and the universal

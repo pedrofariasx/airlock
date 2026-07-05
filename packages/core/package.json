@@ -1,5 +1,5 @@
 {
-  "name": "@veil/core",
+  "name": "@airlock/core",
   "version": "0.1.0",
   "description": "Pure, zero-dependency, isomorphic reversible redaction engine.",
   "license": "MIT",
