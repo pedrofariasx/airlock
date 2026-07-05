@@ -59,6 +59,13 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+      # node_modules provides @types/node used by the test files (node:test,
+      # node:assert). The core src itself is zero-dep.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
       # Deno resolves .js relative imports to .ts with this flag. The core
       # engine is the zero-dep isomorphic package we care about here.
       - name: Typecheck core with Deno
@@ -66,7 +73,7 @@ jobs:
           (cd packages/core && deno check --unstable-sloppy-imports src/index.ts)
       - name: Run core tests with Deno
         run: |
-          (cd packages/core && deno test --unstable-sloppy-imports --allow-read --allow-env test/core.test.ts)
+          (cd packages/core && deno test --unstable-sloppy-imports --allow-read --allow-env --node-modules-dir test/core.test.ts)
 
   publish:
     name: Publish to npm
